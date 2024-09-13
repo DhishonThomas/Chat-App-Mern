@@ -1,0 +1,1 @@
+export const MAIN="http://localhost:2000/"
