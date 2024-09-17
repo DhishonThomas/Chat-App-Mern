@@ -2,6 +2,7 @@ import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, V
 import React, { useRef, useState } from 'react'
 import { useToast } from '@chakra-ui/react' 
 import axios from 'axios'
+import {useNavigate} from 'react-router-dom'
 
 interface picState{
     pic:null|string|undefined
@@ -11,12 +12,13 @@ const SignUp = () => {
     const [name,setName]=useState("")
     const [email,setEmail]=useState("");
     const [password,setPassword]=useState("")
-    const [confirmPassword,setConfirmPassword]=useState(null);
+    const [confirmPassword,setConfirmPassword]=useState("");
     const [pic,setPic]=useState<string|null|undefined>(null)
     const [show,setShow]=useState(false)
     const [picLoading, setPicLoading] = useState(false);
     const imageRef=useRef<HTMLInputElement>(null)
 
+const navigate=useNavigate()
 
 const toast=useToast()
 
@@ -118,7 +120,7 @@ try {
             },
           };
           const { data } = await axios.post(
-            "/api/user",
+        `${import.meta.env.VITE_SERVER_URL}api/user`,
             {
               name,
               email,
@@ -127,7 +129,8 @@ try {
             },
             config
           );
-          console.log(data);
+
+          console.log("data",data);
           toast({
             title: "Registration Successful",
             status: "success",
@@ -137,8 +140,8 @@ try {
           });
           localStorage.setItem("userInfo", JSON.stringify(data));
           setPicLoading(false);
-        //   history.push("/chats");
-        } catch (error:any) {
+          navigate("/chats")
+                } catch (error:any) {
           toast({
             title: "Error Occured!",
             description: error?.response.data.message,
@@ -176,6 +179,20 @@ try {
         </InputGroup>
 
     </FormControl>
+
+    <FormControl id='confirmPassword'>
+        <FormLabel>Confirm Password</FormLabel>
+        <InputGroup>
+        <Input placeholder='Confirm Your Password' type={show?"text":"password"}  onChange={(e)=>setConfirmPassword(e.target.value)}/>
+        <InputRightElement width={"4.5rem"}>
+        <Button h={"1.75rem"} size={"sm"} onClick={handleClick}>
+        {show?"Hide":"Show"}
+        </Button>
+        </InputRightElement>
+        </InputGroup>
+
+    </FormControl>
+
     <FormControl id='pic'>
         <FormLabel>Upload Your Picture</FormLabel>
         <Input type='file' p={1.5} accept='image/*' ref={imageRef} onChange={postDetails}/>

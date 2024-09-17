@@ -6,8 +6,10 @@ import { hashedPssword } from '../config/passwordManager'
 const registerUser=asyncHandler(async(req,res)=>{
  const{name,email,password,pic}=req.body   
 
+console.log(name,email,password,pic);
 
- if(!name||!email||!password){
+ if(!name||!email||!password||!pic){
+   console.log("worked")
     res.status(400)
     throw new Error("Please Enter all the Feilds")
  }
@@ -19,15 +21,16 @@ const registerUser=asyncHandler(async(req,res)=>{
     throw new Error("User already exists")
  }
  const passwordHash=await hashedPssword(password)
+ console.log(passwordHash)
 
 
  const user=await User.create({
     name,
     email,
-    passwordHash,
+    password:passwordHash,
     pic,
  })
-
+console.log(user)
  if(user){
     res.status(201).json({
         _id:user._id,
