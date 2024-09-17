@@ -1,8 +1,18 @@
 import mongoose from "mongoose";
+import bcrypt from 'bcryptjs'
 
-const userSchema=new mongoose.Schema({
+interface UserSchema{
+    name:string,
+    email:string,
+    password:string,
+    pic:string,
+    matchPassword(enteredPassword:string):Promise<boolean>
+
+}
+
+const userSchema=new mongoose.Schema<UserSchema>({
      name:{type:String,required:true},
-     email:{type:String,required:true},
+     email:{type:String,required:true,unique:true},
      password:{type:String,required:true},
      pic:{
         type:String,
@@ -15,6 +25,12 @@ const userSchema=new mongoose.Schema({
     timestamps:true
 }
 )
+
+userSchema.methods.matchPassword=async function (enteredPassword:string){
+    return await bcrypt.compare(enteredPassword,this.password)
+}
+
+
 
 const User=mongoose.model("User",userSchema)
 
