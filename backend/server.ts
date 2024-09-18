@@ -3,6 +3,7 @@ import doenv from 'dotenv'
 import connectDB from './config/db'
 import userRoutes from './router/userRouter'
 import { errorHandler, notFound } from './middleware/errorMiddleware'
+import cors from 'cors'
 
 doenv.config()
 connectDB();
@@ -11,6 +12,7 @@ const PORT=process.env.PORT||1000
 const server=express()
 
 server.use(express.json())
+server.use(cors())   
 
 
 server.use('/api/user',userRoutes)

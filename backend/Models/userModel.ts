@@ -6,6 +6,7 @@ interface UserSchema{
     email:string,
     password:string,
     pic:string,
+    isAdmin:boolean,
     matchPassword(enteredPassword:string):Promise<boolean>
 
 }
@@ -19,7 +20,12 @@ const userSchema=new mongoose.Schema<UserSchema>({
         required:true,
         default:
             "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
-        }
+        },
+        isAdmin: {
+            type: Boolean,
+            required: true,
+            default: false,
+          },
 },
 {
     timestamps:true
