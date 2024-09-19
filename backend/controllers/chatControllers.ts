@@ -72,28 +72,30 @@ res.status(200).send(data);
 });
 
 const createGroupChat = expressAsyncHandler(async (req, res) => {
+  console.log(req.body.users,req.body.name)
   if (!req.body.users || !req.body.name) {
      res.status(400).send({ message: "Please Fill all the feilds" });
   }
 
-  var users = JSON.parse(req.body.users);
-
+  var users = JSON.parse(req.body.users)[0].split(',');
+console.log(users.length)
   if (users.length < 2) {
      res
       .status(400)
       .send("More than 2 users are required to form a group chat");
+      return
   }
 
-  users.push(req.user);
-
+  users.push(req.user._id.toString());
+console.log(users)
   try {
     const groupChat = await Chat.create({
       chatName: req.body.name,
       users: users,
       isGroupChat: true,
-      groupAdmin: req.user,
+      groupAdmin: req.user._id.toString(),
     });
-
+console.log(groupChat)
     const fullGroupChat = await Chat.findOne({ _id: groupChat._id })
       .populate("users", "-password")
       .populate("groupAdmin", "-password");
