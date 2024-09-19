@@ -2,7 +2,14 @@ import { Container,Box ,Text, Tabs, TabList, Tab, TabPanels, TabPanel} from '@ch
 import React from 'react'
 import Login from '../components/authentication/Login'
 import SignUp from '../components/authentication/SignUp'
+import { useNavigate } from 'react-router-dom'
 const HomePage = () => {
+
+  const navigate=useNavigate()
+
+  const user=JSON.stringify(localStorage.getItem('userInfo'))
+
+  if(user)navigate("/chats")
   return (
   
     <Container maxW={'xl'} centerContent>
