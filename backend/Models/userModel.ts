@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcryptjs'
 
-interface UserSchema{
+export interface UserSchema extends Document{
     name:string,
     email:string,
     password:string,

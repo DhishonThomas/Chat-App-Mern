@@ -1,16 +1,27 @@
 import mongoose from "mongoose";
+import { UserSchema } from "./userModel";
+import { MessageDocument } from "./messageModel";
 
-const chatModel=new mongoose.Schema(
+export interface ChatDocument extends Document {
+    chatName: string;
+    isGroupChat: boolean;
+    users: UserSchema[];
+    latestMessage?: MessageDocument; 
+    groupAdmin?: UserSchema;
+  }
+  
+
+const chatModel=new mongoose.Schema<ChatDocument>(
     {
         chatName:{type:String,trim:true},
         isGroupChat:{type:Boolean,default:false},
         users:[
             {type:mongoose.Schema.ObjectId,
-                ref:"Message"
+                ref:"User"
             },
         
         ],
-        lastestMessage:{
+        latestMessage:{
             type:mongoose.Schema.Types.ObjectId,
             ref:"Message"
         },

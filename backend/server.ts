@@ -4,7 +4,7 @@ import connectDB from './config/db'
 import userRoutes from './router/userRouter'
 import { errorHandler, notFound } from './middleware/errorMiddleware'
 import cors from 'cors'
-
+import chatRoutes from './router/chatRoutes'
 doenv.config()
 connectDB();
 const PORT=process.env.PORT||1000
@@ -16,6 +16,7 @@ server.use(cors())
 
 
 server.use('/api/user',userRoutes)
+server.use('/api/chat',chatRoutes)
 
 server.use(notFound)
 server.use(errorHandler)
